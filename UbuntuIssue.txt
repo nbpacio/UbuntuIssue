@@ -1,0 +1,61 @@
+
+
+
+
+
+
+Press Ctrl+Alt+F3 and login into the shell.
+
+Now run ls -lah. If in the output the line
+
+-rw-------  1 root root   53 Nov 29 10:19 .Xauthority
+
+then you need to do chown username:username .Xauthority and try logging in.
+
+Else, do ls -ld /tmp. Check for the first 10 letters in the left: they should read exactly so: drwxrwxrwt.
+
+drwxrwxrwt 15 root root 4096 Nov 30 04:17 /tmp
+
+Else, you need to do sudo chmod a+wt /tmp and check again.
+
+If not both, I'd recommend you either
+
+    dpkg-reconfigure lightdm
+    or uninstall, reinstall it.
+
+Now press Alt+-> until you reach the login screen again, and restart.
+
+
+
+==============
+
+
+
+
+I had a nearly identical problem a few months ago. Switching into a console from the LightDM login screen (Ctrl-Alt-F1), logging in with administrative username and password, and entering the following commands resolved the issue:
+
+sudo mv ~/.Xauthority ~/.Xauthority.backup
+sudo service lightdm restart
+
+
+
+
+
+
+==============
+
+
+
+	
+
+You might be having problems with LightDM, the login manager that comes in Ubuntu by default. In 12.04 it used to do the same problem you are describing.
+
+You can install GDM, an alternative login manager, to get around this:
+
+At the login screen, press and hold Ctrl+Alt+F2 to go to the terminal. Don't be afraid! Just log in here with your username and password.
+
+Then, type sudo apt-get install gdm. Let it install and type sudo dpkg-reconfigure gdm and follow the prompts to set it as your login manager.
+
+Press Ctrl+Alt+F7 to get back to the login screen which should now look different. Does logging in work? If it does, your problem is solved!
+
+If it doesn't, go back to the fullscreen terminal and type sudo dpkg-reconfigure lightdm to set LigthDM as you login manager again. Now you know that this is a problem with your graphics drivers for sure.
